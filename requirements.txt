@@ -1,0 +1,5 @@
+requests>=2.28
+# urllib3 2.x warns on macOS system Python (LibreSSL); 1.26 works the same here.
+urllib3>=1.26,<2
+tzdata
+psycopg[binary]>=3.2
