@@ -1,0 +1,23 @@
+# Local PostgreSQL for flights-to-cuba. Start with: docker compose up -d
+# Credentials come from .env (see .env.example); nothing secret lives here.
+services:
+  db:
+    image: postgres:18
+    container_name: flights-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-flights}
+      POSTGRES_USER: ${POSTGRES_USER:-flights}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:5432:5432"   # only reachable from this computer
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
